@@ -19,20 +19,22 @@ $response = array();
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    
+
     $query = "SELECT password FROM profile_siswa WHERE nama_siswa = ?";
     $stmt = $koneksi->prepare($query);
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
         $hashedPasswordFromDB = $row['password'];
-    
+        // $idSiswa = $row['id_Siswa'];
+
         // Gunakan password_verify untuk memverifikasi
         if (password_verify($password, $hashedPasswordFromDB)) {
             $response['message'] = 'success';
+            // $response['id_siswa'] = $idSiswa;
         } else {
             $response['message'] = 'error';
         }
